@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="320" height="320" xmlns="http://www.w3.org/2000/svg">
+
+<path transform="scale(32) translate(5, 5)" d="M 1 0 l -1 0"
+  stroke="red" fill="white" stroke-width="0.05" fill-opacity="0.0"/>
+
+
+<path transform="scale(32) translate(5, 5)" d="M 1 0
+
+h 1
+v -3.14159265359
+h -4.93480220054
+v 5.16771278005
+h 4.05871212642
+v -2.55016403988
+h -1.33526276885
+v 0.599264529321
+h 0.235330630359
+v -0.0821458866111
+h -0.02580689139
+v 0.00737043094571
+h 0.0019295743094
+"
+  stroke="black" fill="white" stroke-width="0.05" fill-opacity="0.0"/>
+
+
+</svg>
