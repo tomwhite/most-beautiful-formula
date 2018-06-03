@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>The Most Beautiful Formula</title>
+    <script type="text/javascript">
+      function draw() {
+        var canvas = document.getElementById('eipi');
+        if (canvas.getContext) {
+          var ctx = canvas.getContext('2d');
+          ctx.scale(32, 32);
+          ctx.translate(5, 5);
+          var path = getPointsAsPath();
+          ctx.lineWidth = 0.01;
+          ctx.stroke(path);
+        }
+      }
+
+      function getPointsAsPath() {
+        var path = new Path2D();
+        path.moveTo(0, 0);
+        getPoints().forEach(function(p, index, array) {
+          path.lineTo(p.x, p.y);
+        });
+        return path;
+      }
+
+      function getPoints() {
+        var points = [];
+        var horiz = true;
+        var dist = 1;
+        var p = {x: dist, y: 0}; // remember last point
+        points.push({x: p.x, y: p.y});
+        for (var i = 1; i < 10; i++) {
+          horiz = !horiz;
+          dist = dist * Math.PI / i;
+          if (i % 2 == 1) {
+            dist = -dist;
+          }
+          if (horiz) {
+            p.x = p.x + dist;
+          } else {
+            p.y = p.y + dist;
+          }
+          points.push({x: p.x, y: p.y});
+        }
+        return points;
+      }
+      function cartesian2Polar(p) {
+        return {r: Math.sqrt(p.x * p.x + p.y * p.y), theta: Math.atan2(p.y, p.x)};
+      }
+      function polar2Cartesian(p) {
+        return {x: p.r * Math.cos(p.theta), y: p.r * Math.sin(p.theta)};
+      }
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="eipi" width="320" height="320"></canvas>
+  </body>
+</html>
