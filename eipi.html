@@ -4,14 +4,20 @@
     <meta charset="utf-8"/>
     <title>The Most Beautiful Formula</title>
     <script type="text/javascript">
+      var sf = 32;
+      var steps = 8;
+
       function draw() {
         var canvas = document.getElementById('eipi');
         if (canvas.getContext) {
           var ctx = canvas.getContext('2d');
-          ctx.scale(32, 32);
-          ctx.translate(5, 5);
-          var path = getPointsAsPath();
+          ctx.scale(sf, sf);
+          ctx.translate(640/(sf*2), 640/(sf*2));
           ctx.lineWidth = 0.01;
+          ctx.fillRect(-1, 0, 0.05, 0.05);
+          var path = getPointsAsPath();
+          ctx.stroke(path);
+          var path = getPointsAsPathInverted();
           ctx.stroke(path);
         }
       }
@@ -19,32 +25,49 @@
       function getPointsAsPath() {
         var path = new Path2D();
         path.moveTo(0, 0);
-        getPoints().forEach(function(p, index, array) {
+        var p = {x: 0, y: 0};
+        getDeltas().forEach(function(delta, index, array) {
+          p.x = p.x + delta.x;
+          p.y = p.y + delta.y;
           path.lineTo(p.x, p.y);
         });
         return path;
       }
 
-      function getPoints() {
-        var points = [];
+      function getPointsAsPathInverted() {
+        var path = new Path2D();
+        path.moveTo(0, 0);
+        var p = {x: 0, y: 0};
+        getDeltas().forEach(function(delta, index, array) {
+          var inc = 20;
+          for (var i = 0; i < inc; i++) {
+            p.x = p.x + delta.x/inc;
+            p.y = p.y + delta.y/inc;
+            p2 = itrx(polar2Cartesian(invert(cartesian2Polar(trx(p)))));
+            path.lineTo(p2.x, p2.y);
+          }
+        });
+        return path;
+      }
+
+      function getDeltas() {
+        var deltas = [];
         var horiz = true;
         var dist = 1;
-        var p = {x: dist, y: 0}; // remember last point
-        points.push({x: p.x, y: p.y});
-        for (var i = 1; i < 10; i++) {
+        deltas.push({x: dist, y: 0});
+        for (var i = 1; i < steps; i++) {
           horiz = !horiz;
           dist = dist * Math.PI / i;
           if (i % 2 == 1) {
             dist = -dist;
           }
           if (horiz) {
-            p.x = p.x + dist;
+            deltas.push({x: dist, y: 0});
           } else {
-            p.y = p.y + dist;
+            deltas.push({x: 0, y: dist});
           }
-          points.push({x: p.x, y: p.y});
         }
-        return points;
+        return deltas;
       }
       function cartesian2Polar(p) {
         return {r: Math.sqrt(p.x * p.x + p.y * p.y), theta: Math.atan2(p.y, p.x)};
@@ -52,12 +75,21 @@
       function polar2Cartesian(p) {
         return {x: p.r * Math.cos(p.theta), y: p.r * Math.sin(p.theta)};
       }
+      function invert(p) {
+        return {r: 1.0 / p.r, theta: p.theta};
+      }
+      function trx(p) {
+        return {x: p.x + 1, y: p.y};
+      }
+      function itrx(p) {
+        return {x: p.x - 1, y: p.y};
+      }
     </script>
     <style type="text/css">
       canvas { border: 1px solid black; }
     </style>
   </head>
   <body onload="draw();">
-    <canvas id="eipi" width="320" height="320"></canvas>
+    <canvas id="eipi" width="640" height="640"></canvas>
   </body>
 </html>
