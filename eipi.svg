@@ -3,11 +3,10 @@
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="640" height="640" xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 20 20">
 
-<g id="container" transform="scale(1)" stroke-width="0.025">
-  <!-- <path d="M 1 0 l -1 0"
-    stroke="red" fill="white" fill-opacity="0.0"/> -->
-  <path id="path" d="M 1 0 h 1"
-    stroke="black" fill="white" fill-opacity="0.0"/>
+<g id="container" transform="scale(1)" stroke-width="0.05" fill="white" fill-opacity="0.0">
+  <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+  <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+  <path id="path" d="M 1 0 h 1" stroke="black" />
 </g>
 
   <script type="text/javascript"><![CDATA[
@@ -41,7 +40,7 @@
     function repeat() {
       timeout = timeIncrement;
       zoom *= 1.01;
-      if (zoom > 1000000) {
+      if (zoom > 500000) {
         zoom = startZoom;
         timeout = initialPause;
       }
@@ -49,7 +48,7 @@
         console.log(zoom);
       }
       container.setAttribute('transform','scale(' + zoom + ')');
-      container.setAttribute('stroke-width', 0.025 * startZoom /zoom); // constant width
+      container.setAttribute('stroke-width', 0.05 * startZoom /zoom); // constant width
       setTimeout(repeat, timeout);
     }
     setTimeout(repeat, initialPause);
