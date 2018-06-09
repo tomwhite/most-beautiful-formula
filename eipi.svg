@@ -1,29 +1,58 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="320" height="320" xmlns="http://www.w3.org/2000/svg">
+<svg width="640" height="640" xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 20 20">
 
-<path transform="scale(32) translate(5, 5)" d="M 1 0 l -1 0"
-  stroke="red" fill="white" stroke-width="0.05" fill-opacity="0.0"/>
+<g id="container" transform="scale(1)" stroke-width="0.025">
+  <!-- <path d="M 1 0 l -1 0"
+    stroke="red" fill="white" fill-opacity="0.0"/> -->
+  <path id="path" d="M 1 0 h 1"
+    stroke="black" fill="white" fill-opacity="0.0"/>
+</g>
 
+  <script type="text/javascript"><![CDATA[
+    var startZoom = 1;
+    var initialPause = 2000;
+    var timeIncrement = 10;
 
-<path transform="scale(32) translate(5, 5)" d="M 1 0
+    var zoom = startZoom;
+    var container = document.getElementById("container");
+    var count = 0;
 
-h 1
-v -3.14159265359
-h -4.93480220054
-v 5.16771278005
-h 4.05871212642
-v -2.55016403988
-h -1.33526276885
-v 0.599264529321
-h 0.235330630359
-v -0.0821458866111
-h -0.02580689139
-v 0.00737043094571
-h 0.0019295743094
-"
-  stroke="black" fill="white" stroke-width="0.05" fill-opacity="0.0"/>
+    function getPath(steps) {
+      var d = "M 1 0 h 1 ";
+      var horiz = true;
+      var dist = 1;
+      for (var i = 1; i < steps; i++) {
+        horiz = !horiz;
+        dist = dist * Math.PI / i;
+        if (i % 2 == 1) {
+          dist = -dist;
+        }
+        d += (horiz ? "h" : "v") + " " + dist + " ";
+      }
+      console.log(d);
+      return d;
+    }
 
+    var path = document.getElementById("path");
+    path.setAttribute('d', getPath(20));
+
+    function repeat() {
+      timeout = timeIncrement;
+      zoom *= 1.01;
+      if (zoom > 1000000) {
+        zoom = startZoom;
+        timeout = initialPause;
+      }
+      if (count++ % 100 == 0) {
+        console.log(zoom);
+      }
+      container.setAttribute('transform','scale(' + zoom + ')');
+      container.setAttribute('stroke-width', 0.025 * startZoom /zoom); // constant width
+      setTimeout(repeat, timeout);
+    }
+    setTimeout(repeat, initialPause);
+    ]]></script>
 
 </svg>

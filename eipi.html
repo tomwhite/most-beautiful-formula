@@ -4,8 +4,8 @@
     <meta charset="utf-8"/>
     <title>The Most Beautiful Formula</title>
     <script type="text/javascript">
-      var sf = 32;
-      var steps = 8;
+      var sf = 64;
+      var steps = 20;
 
       function draw() {
         var canvas = document.getElementById('eipi');
@@ -16,7 +16,7 @@
           ctx.lineWidth = 0.01;
           ctx.fillRect(-1, 0, 0.05, 0.05);
           var path = getPointsAsPath();
-          ctx.stroke(path);
+          //ctx.stroke(path);
           var path = getPointsAsPathInverted();
           ctx.stroke(path);
         }
@@ -43,7 +43,7 @@
           for (var i = 0; i < inc; i++) {
             p.x = p.x + delta.x/inc;
             p.y = p.y + delta.y/inc;
-            p2 = itrx(polar2Cartesian(invert(cartesian2Polar(trx(p)))));
+            p2 = itrx(polar2Cartesian(hyp(invert(cartesian2Polar(trx(p))))));
             path.lineTo(p2.x, p2.y);
           }
         });
@@ -77,6 +77,10 @@
       }
       function invert(p) {
         return {r: 1.0 / p.r, theta: p.theta};
+      }
+      function hyp(p) {
+        return p;
+        //return {r: Math.log(Math.log(p.r)), theta: p.theta};
       }
       function trx(p) {
         return {x: p.x + 1, y: p.y};
