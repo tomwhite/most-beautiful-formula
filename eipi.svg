@@ -6,18 +6,26 @@
 <g id="container" transform="scale(1)" stroke-width="0.05" fill="white" fill-opacity="0.0">
   <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
   <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-  <path id="path" d="M 1 0 h 1" stroke="black" />
+  <path id="path" stroke="black" />
   <!-- <text x="0" y="1" fill="red" fill-opacity="1.0" transform="scale(0.01)">&#960;/2</text> -->
 </g>
 
   <script type="text/javascript"><![CDATA[
     var startZoom = 1;
-    var initialPause = 2000;
+    var initialPause = 5000;
     var timeIncrement = 10;
 
     var zoom = startZoom;
     var container = document.getElementById("container");
     var count = 0;
+
+    function dist(p1, p2) {
+      return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+    }
+
+    function midpoint(p1, p2) {
+      return {x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2};
+    }
 
     function getPoints(steps) {
       var points = [];
@@ -51,11 +59,43 @@
       return d;
     }
 
-    var d = getPointsAsPath(getPoints(20));
-    console.log(d)
-    document.getElementById("path").setAttribute('d', d);
+    function createLabel(x, y, r) {
+      var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttributeNS(null, 'cx', x);
+      c.setAttributeNS(null, 'cy', y);
+      c.setAttributeNS(null, 'r', r);
+      c.setAttributeNS(null, 'style', 'fill: blue; fill-opacity="0.0"; stroke: blue; stroke-width: ' + r);
+      container.appendChild(c);
+    }
 
-    function repeat() {
+    function addLabels(points) {
+      points.forEach(function(p, index, array) {
+        if (index < array.length - 1) {
+          var mid = midpoint(array[index], array[index+1]);
+          createLabel(mid.x, mid.y, dist(array[index], array[index+1]) / 50);
+        }
+      });
+    }
+
+    var points = getPoints(20);
+
+    var spiralCount = 0;
+    function spiral() {
+      spiralCount++;
+      var d = getPointsAsPath(points.slice(0, spiralCount));
+      console.log(d);
+      document.getElementById("path").setAttribute('d', d);
+      if (spiralCount == points.length) {
+        return;
+      }
+      setTimeout(spiral, 750);
+    }
+    setTimeout(spiral, 750);
+
+    // TODO: add labels to each segment saying how long it is (e.g. pi^2/2!)
+    //addLabels(getPoints(20));
+
+    function zoomIn() {
       timeout = timeIncrement;
       zoom *= 1.01;
       if (zoom > 10000000) {
@@ -68,9 +108,9 @@
 
       container.setAttribute('transform','scale(' + zoom + ')');
       container.setAttribute('stroke-width', 0.05 * startZoom / zoom); // constant width
-      setTimeout(repeat, timeout);
+      setTimeout(zoomIn, timeout);
     }
-    setTimeout(repeat, initialPause);
+    setTimeout(zoomIn, initialPause);
     ]]></script>
 
 </svg>
