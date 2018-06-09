@@ -7,6 +7,7 @@
   <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
   <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
   <path id="path" d="M 1 0 h 1" stroke="black" />
+  <!-- <text x="0" y="1" fill="red" fill-opacity="1.0" transform="scale(0.01)">&#960;/2</text> -->
 </g>
 
   <script type="text/javascript"><![CDATA[
@@ -18,37 +19,55 @@
     var container = document.getElementById("container");
     var count = 0;
 
-    function getPath(steps) {
-      var d = "M 1 0 h 1 ";
+    function getPoints(steps) {
+      var points = [];
       var horiz = true;
+      var x = 1;
+      var y = 0;
       var dist = 1;
+      x += dist;
+      points.push({x: x, y: y});
       for (var i = 1; i < steps; i++) {
         horiz = !horiz;
         dist = dist * Math.PI / i;
         if (i % 2 == 1) {
           dist = -dist;
         }
-        d += (horiz ? "h" : "v") + " " + dist + " ";
+        if (horiz) {
+          x += dist;
+        } else {
+          y += dist;
+        }
+        points.push({x: x, y: y});
       }
-      console.log(d);
+      return points;
+    }
+
+    function getPointsAsPath(points) {
+      var d = "M 1 0 ";
+      points.forEach(function(p, index, array) {
+        d += "L " + p.x + " " + p.y + " ";
+      });
       return d;
     }
 
-    var path = document.getElementById("path");
-    path.setAttribute('d', getPath(20));
+    var d = getPointsAsPath(getPoints(20));
+    console.log(d)
+    document.getElementById("path").setAttribute('d', d);
 
     function repeat() {
       timeout = timeIncrement;
       zoom *= 1.01;
-      if (zoom > 500000) {
+      if (zoom > 10000000) {
         zoom = startZoom;
         timeout = initialPause;
       }
       if (count++ % 100 == 0) {
         console.log(zoom);
       }
+
       container.setAttribute('transform','scale(' + zoom + ')');
-      container.setAttribute('stroke-width', 0.05 * startZoom /zoom); // constant width
+      container.setAttribute('stroke-width', 0.05 * startZoom / zoom); // constant width
       setTimeout(repeat, timeout);
     }
     setTimeout(repeat, initialPause);
