@@ -19,14 +19,6 @@
     var container = document.getElementById("container");
     var count = 0;
 
-    function dist(p1, p2) {
-      return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
-    }
-
-    function midpoint(p1, p2) {
-      return {x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2};
-    }
-
     function getPoints(steps) {
       var points = [];
       var horiz = true;
@@ -59,31 +51,12 @@
       return d;
     }
 
-    function createLabel(x, y, r) {
-      var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      c.setAttributeNS(null, 'cx', x);
-      c.setAttributeNS(null, 'cy', y);
-      c.setAttributeNS(null, 'r', r);
-      c.setAttributeNS(null, 'style', 'fill: blue; fill-opacity="0.0"; stroke: blue; stroke-width: ' + r);
-      container.appendChild(c);
-    }
-
-    function addLabels(points) {
-      points.forEach(function(p, index, array) {
-        if (index < array.length - 1) {
-          var mid = midpoint(array[index], array[index+1]);
-          createLabel(mid.x, mid.y, dist(array[index], array[index+1]) / 50);
-        }
-      });
-    }
-
     var points = getPoints(20);
 
     var spiralCount = 0;
     function spiral() {
       spiralCount++;
       var d = getPointsAsPath(points.slice(0, spiralCount));
-      console.log(d);
       document.getElementById("path").setAttribute('d', d);
       if (spiralCount == points.length) {
         return;
@@ -91,9 +64,6 @@
       setTimeout(spiral, 750);
     }
     setTimeout(spiral, 750);
-
-    // TODO: add labels to each segment saying how long it is (e.g. pi^2/2!)
-    //addLabels(getPoints(20));
 
     function zoomIn() {
       timeout = timeIncrement;

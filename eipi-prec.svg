@@ -1,0 +1,128 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="640" height="640" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-10 -10 20 20">
+
+<g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+  <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+  <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+  <path id="path" stroke="black" />
+  <!-- <text x="0" y="1" fill="red" fill-opacity="1.0" transform="scale(0.01)">&#960;/2</text> -->
+</g>
+
+  <script xlink:href='decimal.min.js'></script>
+
+
+  <script type="text/javascript"><![CDATA[
+    var startZoom = new Decimal(1);
+    var initialPause = 5000;
+    var timeIncrement = 10;
+
+    var zoom = startZoom;
+    var container = document.getElementById("container");
+    var count = 0;
+
+    function getPointsAsPath(points) {
+      var d = "M 1 0 ";
+      points.forEach(function(p, index, array) {
+        d += "L " + p.x + " " + p.y + " ";
+      });
+      return d;
+    }
+
+    function getPointsAsPathScaled(points, scale) {
+      var d = "M " + scale + " 0 ";
+      points.forEach(function(p, index, array) {
+        d += "L " + (scale * p.x) + " " + (scale * p.y) + " ";
+      });
+      return d;
+    }
+
+    function getPointsPrec(steps) {
+      Decimal.set({precision: 500});
+
+      var points = [];
+      var pi = Decimal.acos(-1);
+      var horiz = true;
+      var x = new Decimal(1);
+      var y = new Decimal(0);
+      points.push({x: x, y: y});
+      var dist = new Decimal(1);
+      x = x.plus(dist);
+      points.push({x: x, y: y});
+      for (var i = 1; i < steps; i++) {
+        horiz = !horiz;
+        dist = dist.times(pi).dividedBy(new Decimal(i));
+        if (i % 2 == 1) {
+          dist = dist.negated();
+        }
+        if (horiz) {
+          x = x.plus(dist);
+        } else {
+          y = y.plus(dist);
+        }
+        points.push({x: x, y: y});
+      }
+      return points;
+    }
+
+    function getPointsPrecAsPathScaled(points, scale) {
+      var d = "";
+      for (var i = 0; i < points.length; i++) {
+        p = points[i];
+        if (Math.min(p.x.e, p.y.e) + scale.e > 2) {
+          // TODO: want to remove from points at this point as they are never needed again
+          continue;
+        } else if (Math.max(p.x.e, p.y.e) + scale.e < -4) {
+          break;
+        }
+        d += (d.length == 0 ? "M" : "L") + " " + scale.times(p.x).toNumber() + " " + scale.times(p.y).toNumber() + " ";
+      };
+      return d;
+    }
+
+    document.addEventListener('click', function(event) {
+      zoomInOnce(10);
+      console.log("Zoom exponent = " + zoom.e);
+    });
+
+    var points = getPointsPrec(200);
+
+    var spiralCount = 0;
+    function spiral() {
+      spiralCount++;
+      var d = getPointsAsPath(points.slice(0, spiralCount));
+      document.getElementById("path").setAttribute('d', d);
+      if (spiralCount == points.length) {
+        return;
+      }
+      setTimeout(spiral, 750);
+    }
+    //setTimeout(spiral, 750);
+
+    var d = getPointsPrecAsPathScaled(points, new Decimal(1));
+    document.getElementById("path").setAttribute('d', d);
+
+    function zoomInOnce(scale) {
+      zoom = zoom.times(new Decimal(scale));
+      var d = getPointsPrecAsPathScaled(points, zoom);
+      document.getElementById("path").setAttribute('d', d);
+    }
+
+    function zoomIn() {
+      timeout = timeIncrement;
+      //zoom *= 1.01;
+      //if (zoom > 10000000) {
+      //  zoom = startZoom;
+      //  timeout = initialPause;
+      //}
+      zoomInOnce(1.01);
+      //var d = getPointsAsPathScaled(points, zoom);
+      //document.getElementById("path").setAttribute('d', d);
+
+      setTimeout(zoomIn, timeout);
+    }
+    setTimeout(zoomIn, initialPause);
+    ]]></script>
+
+</svg>
