@@ -1,58 +1,47 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="640" height="640" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-10 -10 20 20">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="640" height="640" viewBox="-10 -10 20 20">
 
-<g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
-  <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
-  <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-  <path id="path" stroke="black" />
-  <!-- <text x="0" y="1" fill="red" fill-opacity="1.0" transform="scale(0.01)">&#960;/2</text> -->
-</g>
+  <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+    <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+    <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+    <path id="path" stroke="black" />
+  </g>
 
   <script xlink:href='decimal.min.js'></script>
 
-
   <script type="text/javascript"><![CDATA[
-    var startZoom = new Decimal(1);
+    Decimal.set({precision: 500});
+    var ZERO = new Decimal(0);
+    var ONE = new Decimal(1);
+    var PI = Decimal.acos(-1); // http://mikemcl.github.io/decimal.js/#Pi
+
+    var startZoom = ONE;
+    var zoomFactor = new Decimal(1.01);
+    var maxZoomExp = 200;
+    var maxSpiralCount = 10;
     var initialPause = 5000;
+    var spiralTimeIncrement = 500;
     var timeIncrement = 10;
 
     var zoom = startZoom;
     var container = document.getElementById("container");
     var count = 0;
+    var spiralCount = 0;
 
-    function getPointsAsPath(points) {
-      var d = "M 1 0 ";
-      points.forEach(function(p, index, array) {
-        d += "L " + p.x + " " + p.y + " ";
-      });
-      return d;
-    }
-
-    function getPointsAsPathScaled(points, scale) {
-      var d = "M " + scale + " 0 ";
-      points.forEach(function(p, index, array) {
-        d += "L " + (scale * p.x) + " " + (scale * p.y) + " ";
-      });
-      return d;
-    }
-
-    function getPointsPrec(steps) {
-      Decimal.set({precision: 500});
-
+    function getPoints(steps) {
       var points = [];
-      var pi = Decimal.acos(-1);
       var horiz = true;
-      var x = new Decimal(1);
-      var y = new Decimal(0);
+      var x = ONE;
+      var y = ZERO;
       points.push({x: x, y: y});
-      var dist = new Decimal(1);
+      var dist = ONE;
       x = x.plus(dist);
       points.push({x: x, y: y});
       for (var i = 1; i < steps; i++) {
         horiz = !horiz;
-        dist = dist.times(pi).dividedBy(new Decimal(i));
+        dist = dist.times(PI).dividedBy(new Decimal(i));
         if (i % 2 == 1) {
           dist = dist.negated();
         }
@@ -66,63 +55,66 @@
       return points;
     }
 
-    function getPointsPrecAsPathScaled(points, scale) {
+    function getPointsAsPath(points, scale) {
       var d = "";
       for (var i = 0; i < points.length; i++) {
         p = points[i];
         if (Math.min(p.x.e, p.y.e) + scale.e > 2) {
-          // TODO: want to remove from points at this point as they are never needed again
+          // optimization: remove from points at this point as they are never needed again
           continue;
         } else if (Math.max(p.x.e, p.y.e) + scale.e < -4) {
-          break;
+          break; // don't render any points after here as they are too small
         }
         d += (d.length == 0 ? "M" : "L") + " " + scale.times(p.x).toNumber() + " " + scale.times(p.y).toNumber() + " ";
       };
       return d;
     }
 
-    document.addEventListener('click', function(event) {
-      zoomInOnce(10);
-      console.log("Zoom exponent = " + zoom.e);
-    });
+    var points = getPoints(200);
 
-    var points = getPointsPrec(200);
-
-    var spiralCount = 0;
     function spiral() {
       spiralCount++;
-      var d = getPointsAsPath(points.slice(0, spiralCount));
+      if (spiralCount == maxSpiralCount) {
+        spiralCount = points.length;
+      }
+      var d = getPointsAsPath(points.slice(0, spiralCount), ONE);
       document.getElementById("path").setAttribute('d', d);
       if (spiralCount == points.length) {
         return;
       }
-      setTimeout(spiral, 750);
-    }
-    //setTimeout(spiral, 750);
-
-    var d = getPointsPrecAsPathScaled(points, new Decimal(1));
-    document.getElementById("path").setAttribute('d', d);
-
-    function zoomInOnce(scale) {
-      zoom = zoom.times(new Decimal(scale));
-      var d = getPointsPrecAsPathScaled(points, zoom);
-      document.getElementById("path").setAttribute('d', d);
+      setTimeout(spiral, spiralTimeIncrement);
     }
 
     function zoomIn() {
-      timeout = timeIncrement;
-      //zoom *= 1.01;
-      //if (zoom > 10000000) {
-      //  zoom = startZoom;
-      //  timeout = initialPause;
-      //}
-      zoomInOnce(1.01);
-      //var d = getPointsAsPathScaled(points, zoom);
-      //document.getElementById("path").setAttribute('d', d);
-
-      setTimeout(zoomIn, timeout);
+      zoom = zoom.times(zoomFactor);
+      if (zoom.e >= maxZoomExp) {
+        start();
+        return;
+      }
+      var d = getPointsAsPath(points, zoom);
+      document.getElementById("path").setAttribute('d', d);
+      setTimeout(zoomIn, timeIncrement);
     }
-    setTimeout(zoomIn, initialPause);
+
+    function start() {
+      zoom = startZoom;
+      spiralCount = 0;
+      setTimeout(spiral, spiralTimeIncrement);
+      setTimeout(zoomIn, initialPause);
+    }
+
+    start();
+
+    // For debugging
+    //function zoomInOnce(scale) {
+    //  zoom = zoom.times(new Decimal(scale));
+    //  var d = getPointsAsPath(points, zoom);
+    //  document.getElementById("path").setAttribute('d', d);
+    //}
+    //document.addEventListener('click', function(event) {
+    //  zoomInOnce(10);
+    //  console.log("Zoom exponent = " + zoom.e);
+    //});
     ]]></script>
 
 </svg>
