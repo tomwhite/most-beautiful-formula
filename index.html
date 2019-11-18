@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>The Most Beautiful Formula</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<body>
+<p>
+    Euler's equation
+    \(e^{i \pi} + 1 = 0\)
+    is often described as the most beautiful formula in mathematics.
+</p>
+
+<p>
+    ...
+</p>
+
+<p>
+    The Taylor series for \(e^z\) is
+    $$e^z = \frac{z^0}{0!} + \frac{z^1}{1!} + \frac{z^2}{2!} + \frac{z^3}{3!} + \frac{z^4}{4!} + \frac{z^5}{5!} + \cdots$$
+</p>
+
+<p>
+    Substituting \(z = i \pi\) gives
+    $$e^{i \pi} = \frac{(i \pi)^0}{0!} + \frac{(i \pi)^1}{1!} + \frac{(i \pi)^2}{2!} + \frac{(i \pi)^3}{3!} + \frac{(i \pi)^4}{4!} + \frac{(i \pi)^5}{5!} + \cdots$$
+</p>
+
+<p>
+    Which we can simplify a bit by considering the powers of \(i\):
+    $$e^{i \pi} = \frac{(+1) \pi^0}{0!} + \frac{(i) \pi^1}{1!} + \frac{(-1) \pi^2}{2!} + \frac{(-i) \pi^3}{3!} + \frac{(+1) \pi^4}{4!} + \frac{(i) \pi^5}{5!} + \cdots$$
+    Notice that the powers of \(i\) have period four: the first term is a positive real number, the second is a positive imaginary number, the third is a negative real number,
+    and the fourth is a negative imaginary number. The pattern then repeats.
+</p>
+
+<p>
+    In geometric terms in the complex plane, this is equivalent to moving <i>right</i>, then <i>up</i>, then <i>left</i>, then <i>down</i> - and repeating.
+    The distance we move each time is the magnitude of each term; a power of \(\pi\) divided by a factorial.
+</p>
+<p>
+    So \(\cfrac{\pi^0}{0!}\ = 1\) unit to the <i>right</i>, then \(\cfrac{\pi^1}{1!}\ = 3.14\ldots\) units <i>up</i>,
+    then \(\cfrac{\pi^2}{2!}\ = 4.93\ldots\) units <i>left</i>, then \(\cfrac{\pi^3}{3!}\ = 5.16\ldots\) units <i>down</i>, and so on.
+</p>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="-5 -5 10 10">
+    <defs>
+        <!-- arrowhead marker definition -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+                markerWidth="6" markerHeight="6"
+                orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+        </marker>
+    </defs>
+    <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+        <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+        <path id="path" stroke="black" d="M 0 0 L 1 0" marker-end="url(#arrow)"/>
+        <text x="0.5" y="1" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">1</text>
+    </g>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="-5 -5 10 10">
+    <defs>
+        <!-- arrowhead marker definition -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+                markerWidth="6" markerHeight="6"
+                orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+        </marker>
+    </defs>
+    <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+        <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+        <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14" marker-end="url(#arrow)"/>
+        <text x="1.5" y="-2" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">3.14</text>
+    </g>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="-5 -5 10 10">
+    <defs>
+        <!-- arrowhead marker definition -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+                markerWidth="6" markerHeight="6"
+                orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+        </marker>
+    </defs>
+    <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+        <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+        <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0" marker-end="url(#arrow)"/>
+        <text x="-3" y="-3.8" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">4.93</text>
+    </g>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="-5 -5 10 10">
+    <defs>
+        <!-- arrowhead marker definition -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+                markerWidth="6" markerHeight="6"
+                orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+        </marker>
+    </defs>
+    <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+        <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+        <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0 l 0 5.16" marker-end="url(#arrow)"/>
+        <text x="-3" y="2" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">5.16</text>
+    </g>
+</svg>
+
+<p>
+    Although the size of the first few terms are getting bigger, as you calculate more terms the magnitude rapidly decreases due to the factorial function,
+    which grows faster than any power.
+</p>
+
+<p>
+    Looking at the \(n\)th term (counting from zero), for \(n = 10\) the magnitude is \(0.0258\), and for \(n = 20\) the magnitude is \(0.00000000360\), or \(3.6 \times 10^{-9}\).
+</p>
+
+<p>
+    So the series converges very rapidly. Geometrically, it spirals in towards the point of convergence, which from Euler's equation we know is \(-1\).
+</p>
+
+<p>
+    Let's see how it converges:
+</p>
+
+<object type="image/svg+xml" data="eipi-fixed.svg">
+<img src="eipi-fixed.svg" />
+</object>
+
+
+</body>
+</html>
