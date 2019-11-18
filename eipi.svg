@@ -1,61 +1,28 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="-10 -10 20 20">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="320" viewBox="-10 -10 20 20">
 
   <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
     <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
     <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-    <path id="path" stroke="black" />
+    <path id="path" stroke="#7D3C98" />
   </g>
+
+  <script xlink:href='eipi.js'></script>
 
   <script type="text/javascript"><![CDATA[
     var startZoom = 1;
     var maxZoom = 1e6;
-    var maxSpiralCount = 10;
+    var maxSpiralCount = 9;
     var initialPause = 5000;
     var spiralTimeIncrement = 500;
     var timeIncrement = 10;
 
     var zoom = startZoom;
     var zoomFactor = 1.01;
-    var container = document.getElementById("container");
     var count = 0;
     var spiralCount = 0;
-
-    function getPoints(steps) {
-      var points = [];
-      var horiz = true;
-      var x = 1;
-      var y = 0;
-      points.push({x: x, y: y});
-      var dist = 1;
-      x += dist;
-      points.push({x: x, y: y});
-      for (var i = 1; i < steps; i++) {
-        horiz = !horiz;
-        dist = dist * Math.PI / i;
-        if (i % 2 == 1) {
-          dist = -dist;
-        }
-        if (horiz) {
-          x += dist;
-        } else {
-          y += dist;
-        }
-        points.push({x: x, y: y});
-      }
-      return points;
-    }
-
-    function getPointsAsPath(points, scale) {
-      var d = "";
-      points.forEach(function(p, index, array) {
-        d += (d.length == 0 ? "M" : "L") + " " + (scale * p.x) + " " + (scale * p.y) + " ";
-      });
-      return d;
-    }
-
     var points = getPoints(20);
 
     function spiral() {

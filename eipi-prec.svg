@@ -1,12 +1,12 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="640" height="640" viewBox="-10 -10 20 20">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="320" viewBox="-10 -10 20 20">
 
   <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
     <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
     <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-    <path id="path" stroke="black" />
+    <path id="path" stroke="#7D3C98" />
   </g>
 
   <script xlink:href='decimal.min.js'></script>
@@ -20,7 +20,7 @@
     var startZoom = ONE;
     var zoomFactor = new Decimal(1.01);
     var maxZoomExp = 200;
-    var maxSpiralCount = 10;
+    var maxSpiralCount = 9;
     var initialPause = 5000;
     var spiralTimeIncrement = 500;
     var timeIncrement = 10;

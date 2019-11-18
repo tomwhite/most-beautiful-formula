@@ -127,14 +127,26 @@
     So the series converges very rapidly. Geometrically, it spirals in towards the point of convergence, which from Euler's equation we know is \(-1\).
 </p>
 
-<p>
-    Let's see how it converges:
-</p>
-
 <object type="image/svg+xml" data="eipi-fixed.svg">
-<img src="eipi-fixed.svg" />
 </object>
 
+<p>
+    The rapid convergence means it's over very quickly. If we zoom in, then we can see more of the spiral pattern.
+    We've shifted the path over so that it starts at \(1\) and converges on the origin.
+</p>
+
+<object type="image/svg+xml" data="eipi.svg">
+</object>
+
+<p>
+    We can't zoom indefinitely since eventually we run into the limited precision of floating point arithmetic.
+    The previous animation restarts after a few seconds when it reaches a zoom factor of one million.
+    We can use <a href="http://mikemcl.github.io/decimal.js/">arbitrary precision arithmetic</a> to allow greater zoom
+    factors. This animation runs for a few minutes before restarting.
+</p>
+
+<object type="image/svg+xml" data="eipi-prec.svg">
+</object>
 
 </body>
 </html>
