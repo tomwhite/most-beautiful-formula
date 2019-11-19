@@ -1,0 +1,77 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" viewBox="-5 -5 10 10">
+
+  <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+    <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+    <path d="M 1 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+    <path id="path" stroke="#7D3C98" />
+  </g>
+
+  <g id="labels" stroke-width="0.05" fill="grey" fill-opacity="1.0">
+  </g>
+
+  <script xlink:href='eipi.js'></script>
+
+  <script type="text/javascript"><![CDATA[
+    var maxSpiralCount = 15;
+    var spiralTimeIncrement = 100;
+    var spiralCount = 0;
+    var points = getPoints(20);
+
+    function spiral() {
+      spiralCount++;
+      if (spiralCount == maxSpiralCount) {
+        spiralCount = points.length;
+      }
+      var d = getPointsAsPath(points.slice(0, spiralCount), 1);
+      document.getElementById("path").setAttribute('d', d);
+
+      var labels = getPointsAsLabels(points.slice(0, spiralCount), 1);
+      const labelsNode = document.getElementById("labels");
+      labelsNode.innerHTML = '';
+      for (var i = 0; i < labels.length; i++) {
+        var label = labels[i];
+        var textNode = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textNode.setAttributeNS(null, "x", label.midx);
+        textNode.setAttributeNS(null, "y", label.midy);
+        textNode.setAttributeNS(null, "font-size", label.len / 5);
+        switch (label.i % 4) {
+        case 0:
+          textNode.setAttributeNS(null, "text-anchor", "middle");
+          textNode.setAttributeNS(null, "dominant-baseline", "hanging");
+          break;
+        case 1:
+          textNode.setAttributeNS(null, "text-anchor", "start");
+          textNode.setAttributeNS(null, "dominant-baseline", "central");
+          break;
+        case 2:
+          textNode.setAttributeNS(null, "text-anchor", "middle");
+          break;
+        case 3:
+          textNode.setAttributeNS(null, "text-anchor", "end");
+          textNode.setAttributeNS(null, "dominant-baseline", "central");
+          break;
+        default:
+        }
+        textNode.textContent = i;
+        labelsNode.appendChild(textNode);
+      }
+
+      if (spiralCount == points.length) {
+        spiralCount = 0;
+        return;
+      }
+      setTimeout(spiral, spiralTimeIncrement);
+    }
+
+    function start() {
+      spiralCount = 0;
+      setTimeout(spiral, spiralTimeIncrement);
+    }
+
+    start();
+    ]]></script>
+
+</svg>
