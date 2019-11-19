@@ -43,7 +43,7 @@ function getPointsAsLabels(points, scale) {
       var nudgey = 0;
       switch ((index - 1) % 4) {
         case 0:
-          nudgey = len / 10;
+          nudgey = len / 5;
           break;
         case 1:
           nudgex = len / 10;
