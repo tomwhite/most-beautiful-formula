@@ -33,18 +33,18 @@
         series for \(e^{i \pi}\). It looks something like this:
     </p>
 
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="-5 -5 10 10">
-        <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="-5 -5 10 10">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
             <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
             <path d="M 1 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-            <path id="path" stroke="#7D3C98" />
+            <path id="path1" stroke="#7D3C98" />
         </g>
     </svg>
 
     <script type="text/javascript">
     var points = getPoints(20);
     var d = getPointsAsPath(points, 1);
-    document.getElementById("path").setAttribute('d', d);
+    document.getElementById("path1").setAttribute('d', d);
     </script>
 
     <p>
@@ -82,10 +82,10 @@
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
         </defs>
-        <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
             <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
             <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-            <path id="path" stroke="black" d="M 0 0 L 1 0" marker-end="url(#arrow)"/>
+            <path stroke="black" d="M 0 0 L 1 0" marker-end="url(#arrow)"/>
             <text x="0.5" y="1" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">1</text>
         </g>
     </svg>
@@ -99,10 +99,10 @@
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
         </defs>
-        <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
             <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
             <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-            <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14" marker-end="url(#arrow)"/>
+            <path stroke="black" d="M 0 0 l 1 0 l 0 -3.14" marker-end="url(#arrow)"/>
             <text x="1.5" y="-2" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">3.14</text>
         </g>
     </svg>
@@ -116,10 +116,10 @@
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
         </defs>
-        <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
             <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
             <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-            <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0" marker-end="url(#arrow)"/>
+            <path stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0" marker-end="url(#arrow)"/>
             <text x="-3" y="-3.8" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">4.93</text>
         </g>
     </svg>
@@ -133,10 +133,10 @@
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
         </defs>
-        <g id="container" stroke-width="0.05" fill="white" fill-opacity="0.0">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
             <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
             <path d="M 0 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
-            <path id="path" stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0 l 0 5.16" marker-end="url(#arrow)"/>
+            <path stroke="black" d="M 0 0 l 1 0 l 0 -3.14 l -4.93 0 l 0 5.16" marker-end="url(#arrow)"/>
             <text x="-3" y="2" stroke="black" stroke-width="0.01" fill="black" fill-opacity="1.0" font-size="0.8">5.16</text>
         </g>
     </svg>
@@ -154,12 +154,47 @@
         So the series converges very rapidly. Geometrically, it spirals in towards the point of convergence, which from Euler's equation we know is \(-1\).
     </p>
 
-    <object type="image/svg+xml" data="eipi-fixed.svg">
-    </object>
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="-5 -5 10 10">
+        <g stroke-width="0.05" fill="white" fill-opacity="0.0">
+            <path d="M -10 0 l 20 0" stroke="blue" stroke-opacity="0.2"/>
+            <path d="M 1 -10 l 0 20" stroke="blue" stroke-opacity="0.2"/>
+            <path id="path2" stroke="#7D3C98" />
+        </g>
+    </svg>
+
+    <script type="text/javascript">
+    (function() {
+        var maxSpiralCount = 15;
+        var spiralTimeIncrement = 100;
+        var spiralCount = 0;
+        var points = getPoints(20);
+
+        function spiral() {
+          spiralCount++;
+          if (spiralCount == maxSpiralCount) {
+            spiralCount = points.length;
+          }
+          var d = getPointsAsPath(points.slice(0, spiralCount), 1);
+          document.getElementById("path2").setAttribute('d', d);
+          if (spiralCount == points.length) {
+            spiralCount = 0;
+          }
+          setTimeout(spiral, spiralTimeIncrement);
+        }
+
+        function start() {
+          spiralCount = 0;
+          setTimeout(spiral, spiralTimeIncrement);
+        }
+
+        start();
+    })();
+    </script>
 
     <p>
-        The rapid convergence means it's over very quickly. If we zoom in, then we can see more of the spiral pattern.
-        We've shifted the path over so that it starts at \(1\) and converges on the origin.
+        The rapid convergence means it's over very quickly. However, if the animation is changed to zoom in, then we can
+        see more of the spiral pattern. We've shifted the path over so that it starts at \(1\) and converges on the origin.
+        (<a href="eipi.svg" target="_blank">Open in new window.</a>)
     </p>
 
     <object type="image/svg+xml" data="eipi.svg">
@@ -169,11 +204,21 @@
         We can't zoom indefinitely since eventually we run into the limited precision of floating point arithmetic.
         The previous animation restarts after a few seconds when it reaches a zoom factor of one million.
         We can use <a href="http://mikemcl.github.io/decimal.js/">arbitrary precision arithmetic</a> to allow greater zoom
-        factors. This animation runs for a few minutes before restarting.
+        factors.
     </p>
 
     <object type="image/svg+xml" data="eipi-prec.svg">
     </object>
+
+    <p>
+        This animation runs for a few minutes before restarting.
+        (<a href="eipi-prec.svg" target="_blank">Open in new window.</a>)
+    </p>
+
+    <p>
+        (Implementation note: I tried to add labels to the SVG animation to show each term: \(1\), \(\pi\), \(\frac{\pi^2}{2!}\), ... etc,
+        but MathJax and SVG are hard to get to work well together, especially animated SVG. Hopefully this will become easier in the future.)
+    </p>
 
     <p><i>Tom White, November 2019</i></p>
 </div>
